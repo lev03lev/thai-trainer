@@ -1,0 +1,479 @@
+/* ================= התאמה אישית ================= */
+
+/* ---------- אווטר ---------- */
+.avatar {
+  display: block;
+  flex: none;
+  border-radius: 50%;
+}
+.avatar-fallback {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 55%, var(--accent-2)));
+  color: var(--accent-ink);
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* ---------- אזור המשתמש בסרגל העליון ---------- */
+.user-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 4px 4px 12px;
+  min-height: 42px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 600;
+  max-width: 220px;
+}
+a.user-chip:hover,
+.user-chip[aria-current="page"] {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+.user-chip-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.user-chip.is-static {
+  pointer-events: none;
+}
+.skeleton {
+  background: var(--surface-2);
+}
+.skeleton-line {
+  display: inline-block;
+  width: 56px;
+  height: 10px;
+  border-radius: 5px;
+  background: var(--surface-2);
+}
+
+/* ---------- כפתורים קטנים / שקופים ---------- */
+.btn.ghost {
+  background: transparent;
+}
+.btn.ghost:hover:not(:disabled) {
+  background: var(--surface-2);
+}
+.btn.small-btn {
+  min-height: 40px;
+  padding: 8px 12px;
+  font-size: 15px;
+}
+
+/* ---------- בורר מקטעים ---------- */
+.segmented {
+  display: inline-flex;
+  padding: 4px;
+  gap: 4px;
+  border-radius: 12px;
+  background: var(--surface-2);
+}
+.segmented button {
+  font: inherit;
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--muted);
+  background: transparent;
+  border: 0;
+  border-radius: 9px;
+  padding: 8px 14px;
+  min-height: 40px;
+  cursor: pointer;
+}
+.segmented button[aria-selected="true"] {
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--shadow);
+}
+
+/* ---------- סימון "נבחר" משותף ---------- */
+.check {
+  position: absolute;
+  top: -6px;
+  inset-inline-end: -6px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-size: 14px;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--surface);
+}
+
+/* ---------- רשת אווטרים ---------- */
+.avatar-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(68px, 1fr));
+  gap: 10px;
+}
+.avatar-opt {
+  position: relative;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: 18px;
+  background: var(--surface-2);
+  cursor: pointer;
+  transition: transform 0.12s ease, border-color 0.12s ease, background 0.12s ease;
+}
+.avatar-opt:hover {
+  transform: translateY(-2px);
+  border-color: var(--border);
+}
+.avatar-opt[aria-checked="true"] {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+.avatar-opt .avatar {
+  width: 78% !important;
+  height: auto !important;
+}
+
+/* ---------- רשת ערכות ---------- */
+.theme-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
+  gap: 10px;
+}
+.theme-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: start;
+  font: inherit;
+  color: var(--text);
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: 16px;
+  padding: 10px;
+  cursor: pointer;
+  transition: transform 0.12s ease, border-color 0.12s ease, box-shadow 0.12s ease;
+}
+.theme-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+.theme-card[aria-checked="true"] {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent);
+}
+.tc-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 0 4px 4px;
+}
+.tc-name {
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.tc-scheme {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  background: var(--surface-2);
+  border-radius: 999px;
+  padding: 1px 8px;
+}
+.tc-desc {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+/* תצוגה מקדימה זעירה — הצבעים מגיעים מה-data-theme של האלמנט עצמו */
+.tp-mini {
+  background: var(--bg);
+  border-radius: 10px;
+  padding: 8px;
+  height: 92px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+.tp-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+}
+.tp-split .tp-mini {
+  padding: 6px;
+}
+.tp-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.tp-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+.tp-card {
+  flex: 1;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 7px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.tp-line {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--text);
+  opacity: 0.85;
+  width: 80%;
+}
+.tp-line.mid {
+  width: 55%;
+  background: var(--muted);
+}
+.tp-line.short {
+  width: 40%;
+  background: var(--muted);
+}
+.tp-row {
+  display: flex;
+  gap: 4px;
+  margin-top: auto;
+  align-items: center;
+}
+.tp-btn {
+  width: 34px;
+  height: 12px;
+  border-radius: 6px;
+  background: var(--accent);
+}
+.tp-chip {
+  width: 14px;
+  height: 12px;
+  border-radius: 6px;
+}
+.tp-chip.ok {
+  background: var(--ok);
+}
+.tp-chip.bad {
+  background: var(--bad);
+}
+
+/* ---------- עמוד ההתאמה האישית ---------- */
+.pz-head h1 {
+  margin-bottom: 4px;
+}
+.pz-section {
+  padding: 18px;
+}
+.pz-section-head {
+  margin-bottom: 14px;
+}
+.pz-section-head h2 {
+  margin: 0 0 2px;
+}
+.pz-section-head p {
+  margin: 0;
+}
+.pz-profile {
+  display: grid;
+  gap: 20px;
+}
+.field {
+  display: grid;
+  gap: 8px;
+}
+.field > label,
+.field > .label {
+  font-weight: 700;
+}
+.input-wrap {
+  position: relative;
+  max-width: 360px;
+}
+.input-wrap .text-input {
+  max-width: none;
+  padding-inline-end: 56px;
+}
+.counter {
+  position: absolute;
+  inset-inline-end: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-variant-numeric: tabular-nums;
+}
+.pz-preview {
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: linear-gradient(160deg, var(--accent-soft), var(--surface) 65%);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  align-self: start;
+}
+.pz-preview-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 6px;
+}
+.pz-big-avatar {
+  box-shadow: 0 0 0 4px var(--surface), 0 0 0 6px var(--accent);
+}
+.pz-preview-name {
+  font-size: 20px;
+  font-weight: 700;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+.pz-mock {
+  display: grid;
+  gap: 4px;
+}
+.pz-mock-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 6px 8px 6px 6px;
+}
+.pz-mock-brand {
+  font-weight: 700;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.pz-mock-bar .user-chip {
+  min-height: 36px;
+  font-size: 13px;
+  max-width: 150px;
+}
+.pz-mock-greeting {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-weight: 700;
+}
+.save-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+.toast {
+  color: var(--ok);
+  font-weight: 700;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.toast.show {
+  opacity: 1;
+  transform: none;
+}
+.pz-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+/* פתיח במסך הבית */
+.greet {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.greet .avatar {
+  box-shadow: 0 0 0 3px var(--surface), 0 0 0 5px color-mix(in srgb, var(--accent) 60%, transparent);
+}
+.hero {
+  background: linear-gradient(150deg, var(--accent-soft), var(--surface) 70%);
+}
+
+@media (min-width: 760px) {
+  .theme-grid {
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 12px;
+  }
+  .pz-profile {
+    grid-template-columns: minmax(0, 1fr) 300px;
+    align-items: start;
+  }
+  .pz-preview {
+    position: sticky;
+    top: 84px;
+  }
+}
+
+/* סרגל עליון בטלפון: שם המערכת + אזור המשתמש בשורה אחת, הניווט מתחת */
+@media (max-width: 719px) {
+  .brand {
+    width: auto;
+    flex: 1;
+    min-width: 0;
+    font-size: 16px;
+  }
+  .topbar-inner .user-chip {
+    order: 2;
+    padding-inline-start: 4px;
+  }
+  .topbar-inner .user-chip .user-chip-name {
+    max-width: 90px;
+  }
+  .topbar-inner .nav {
+    order: 3;
+  }
+}
+@media (max-width: 380px) {
+  .topbar-inner .user-chip .user-chip-name {
+    display: none;
+  }
+  .topbar-inner .user-chip {
+    padding: 4px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .avatar-opt,
+  .theme-card,
+  .toast {
+    transition: none;
+  }
+  .avatar-opt:hover,
+  .theme-card:hover {
+    transform: none;
+  }
+}

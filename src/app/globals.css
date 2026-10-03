@@ -1,45 +1,6 @@
+/* צבעי הערכה (--bg, --surface, --accent...) נוצרים מ-src/themes/themes.ts */
 :root {
-  --bg: #fbf8f3;
-  --surface: #ffffff;
-  --surface-2: #f3eee6;
-  --text: #1f1a14;
-  --muted: #62584c;
-  --border: #e2d9cc;
-  --accent: #b2451f;
-  --accent-ink: #ffffff;
-  --accent-soft: #fbe9e1;
-  --ok: #1e6b3a;
-  --ok-soft: #e3f3e8;
-  --bad: #a8261c;
-  --bad-soft: #fbe6e4;
-  --warn: #7a4d00;
-  --warn-soft: #fff1d6;
-  --focus: #1b5fd1;
   --radius: 14px;
-  --shadow: 0 1px 2px rgb(0 0 0 / 0.06), 0 4px 16px rgb(0 0 0 / 0.04);
-  color-scheme: light;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #17130f;
-    --surface: #221c16;
-    --surface-2: #2c251d;
-    --text: #f3ece2;
-    --muted: #bfb3a3;
-    --border: #3d342a;
-    --accent: #f08a5d;
-    --accent-ink: #1b120c;
-    --accent-soft: #3a2419;
-    --ok: #7fd49a;
-    --ok-soft: #173222;
-    --bad: #ff8f84;
-    --bad-soft: #3b1a17;
-    --warn: #ffcc6e;
-    --warn-soft: #3a2c10;
-    --focus: #8ab4ff;
-    color-scheme: dark;
-  }
 }
 
 * {
@@ -53,7 +14,12 @@ body {
 }
 
 body {
-  background: var(--bg);
+  background:
+    radial-gradient(900px 360px at 100% -80px, color-mix(in srgb, var(--accent) 9%, transparent), transparent 70%),
+    radial-gradient(700px 300px at 0% -60px, color-mix(in srgb, var(--accent-2) 7%, transparent), transparent 70%),
+    var(--bg);
+  background-repeat: no-repeat;
+  min-height: 100vh;
   color: var(--text);
   font-family: "Rubik", system-ui, "Segoe UI", Arial, sans-serif;
   font-size: 17px;
@@ -330,7 +296,7 @@ p {
   max-height: 320px;
   object-fit: contain;
   border-radius: 12px;
-  background: #fff;
+  background: var(--img-bg);
   border: 1px solid var(--border);
   margin-bottom: 14px;
 }
@@ -418,6 +384,18 @@ input[type="text"] {
   min-height: 48px;
   width: 100%;
   max-width: 320px;
+}
+input[type="text"]:focus {
+  border-color: var(--accent);
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent);
+}
+input::placeholder {
+  color: var(--muted);
+  opacity: 0.8;
+}
+/* קוד סנכרון: אותיות לועזיות, משמאל לימין */
+.code-input {
   letter-spacing: 0.08em;
   direction: ltr;
   text-align: left;
@@ -503,7 +481,7 @@ td.u {
   aspect-ratio: 3 / 2;
   object-fit: cover;
   border-radius: 10px;
-  background: #fff;
+  background: var(--img-bg);
   margin-bottom: 8px;
 }
 .dish-card a {
@@ -527,7 +505,7 @@ dl.facts dd {
   width: 100%;
   border: 1px solid var(--border);
   border-radius: 8px;
-  background: #fff;
+  background: var(--img-bg);
 }
 
 @media (min-width: 720px) {
