@@ -4,6 +4,8 @@ import Link from "next/link";
 import { DISHES, DISH_BY_ID } from "@/data/menu";
 import { ISSUES } from "@/data/issues";
 import { useProgress } from "@/lib/progress-store";
+import { usePreferences } from "@/lib/preferences/store";
+import { Avatar } from "@/components/Avatar";
 import { mistakeKeys, safetyFocusKeys, streakDays, todayCount } from "@/lib/progress-core";
 import { MODE_INFO, type Mode } from "@/lib/session";
 
@@ -22,6 +24,7 @@ function continueHref(last?: string): { href: string; label: string } {
 
 export default function Home() {
   const p = useProgress();
+  const prefs = usePreferences();
   const answered = p.attempts.length;
   const recent = p.attempts.slice(-100);
   const acc = recent.length ? Math.round((recent.filter((a) => a.correct).length / recent.length) * 100) : null;
@@ -34,13 +37,21 @@ export default function Home() {
   return (
     <div className="stack">
       <section className="card hero">
-        <div style={{ flex: 1 }}>
-          <h1>שלום! מתכוננת למבחן התפריט?</h1>
+        <div className="greet" style={{ flex: 1 }}>
+          {(prefs.avatarId || prefs.displayName) && <Avatar id={prefs.avatarId} name={prefs.displayName} size={64} />}
+          <div>
+            <h1>{prefs.displayName ? `שלום, ${prefs.displayName}!` : "שלום!"} מתכוננת למבחן התפריט?</h1>
           <p className="muted">
             {answered
               ? `היום ענית על ${todayCount(p)} שאלות · רצף של ${streakDays(p)} ימים`
               : "כל השאלות מבוססות על חוברת הלימוד בלבד, עם הפניה לעמוד המקור."}
           </p>
+          {!prefs.displayName && (
+            <p className="small" style={{ margin: 0 }}>
+              <Link href="/personalize">בחרי שם, אווטר וערכת עיצוב ←</Link>
+            </p>
+          )}
+          </div>
         </div>
         <Link className="btn primary" href={cont.href}>
           {cont.label}

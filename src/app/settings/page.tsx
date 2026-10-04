@@ -61,7 +61,7 @@ export default function SettingsPage() {
             >
               <label htmlFor="code">יש לך כבר קוד ממכשיר אחר?</label>
               <div className="row">
-                <input id="code" type="text" autoComplete="off" autoCapitalize="characters" spellCheck={false} value={input} onChange={(e) => setInput(e.target.value)} />
+                <input id="code" type="text" className="code-input" autoComplete="off" autoCapitalize="characters" spellCheck={false} value={input} onChange={(e) => setInput(e.target.value)} />
                 <button type="submit" className="btn">
                   חיבור
                 </button>
