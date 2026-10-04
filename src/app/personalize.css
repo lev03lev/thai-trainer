@@ -24,7 +24,7 @@
   padding: 4px 4px 4px 12px;
   min-height: 42px;
   border-radius: 999px;
-  border: 1px solid var(--border);
+  border: var(--border-w) solid var(--border);
   background: var(--surface);
   color: var(--text);
   text-decoration: none;
@@ -74,7 +74,7 @@ a.user-chip:hover,
   display: inline-flex;
   padding: 4px;
   gap: 4px;
-  border-radius: 12px;
+  border-radius: var(--radius-sm);
   background: var(--surface-2);
 }
 .segmented button {
@@ -126,7 +126,7 @@ a.user-chip:hover,
   align-items: center;
   justify-content: center;
   padding: 0;
-  border: 2px solid transparent;
+  border: calc(var(--border-w) + 1px) solid transparent;
   border-radius: 18px;
   background: var(--surface-2);
   cursor: pointer;
@@ -160,7 +160,7 @@ a.user-chip:hover,
   font: inherit;
   color: var(--text);
   background: var(--surface);
-  border: 2px solid var(--border);
+  border: calc(var(--border-w) + 1px) solid var(--border);
   border-radius: 16px;
   padding: 10px;
   cursor: pointer;
@@ -202,14 +202,15 @@ a.user-chip:hover,
 
 /* תצוגה מקדימה זעירה — הצבעים מגיעים מה-data-theme של האלמנט עצמו */
 .tp-mini {
-  background: var(--bg);
-  border-radius: 10px;
+  background: var(--bg-art), var(--bg);
+  font-family: var(--font-body);
+  border-radius: var(--radius-sm);
   padding: 8px;
   height: 92px;
   display: flex;
   flex-direction: column;
   gap: 6px;
-  border: 1px solid var(--border);
+  border: var(--border-w) solid var(--border);
   overflow: hidden;
 }
 .tp-split {
@@ -234,8 +235,9 @@ a.user-chip:hover,
 .tp-card {
   flex: 1;
   background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 8px;
+  border: var(--border-w) solid var(--border);
+  border-radius: calc(var(--radius-sm) * 0.6);
+  box-shadow: var(--shadow);
   padding: 7px;
   display: flex;
   flex-direction: column;
@@ -265,8 +267,16 @@ a.user-chip:hover,
 .tp-btn {
   width: 34px;
   height: 12px;
-  border-radius: 6px;
-  background: var(--accent);
+  border-radius: calc(var(--radius-sm) * 0.5);
+  background: var(--btn-bg);
+  box-shadow: var(--btn-shadow);
+}
+.tp-title {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 13px;
+  line-height: 1;
+  color: var(--text);
 }
 .tp-chip {
   width: 14px;
@@ -281,9 +291,6 @@ a.user-chip:hover,
 }
 
 /* ---------- עמוד ההתאמה האישית ---------- */
-.pz-head h1 {
-  margin-bottom: 4px;
-}
 .pz-section {
   padding: 18px;
 }
@@ -295,10 +302,6 @@ a.user-chip:hover,
 }
 .pz-section-head p {
   margin: 0;
-}
-.pz-profile {
-  display: grid;
-  gap: 20px;
 }
 .field {
   display: grid;
@@ -323,32 +326,6 @@ a.user-chip:hover,
   transform: translateY(-50%);
   font-variant-numeric: tabular-nums;
 }
-.pz-preview {
-  border-radius: 16px;
-  border: 1px solid var(--border);
-  background: linear-gradient(160deg, var(--accent-soft), var(--surface) 65%);
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  align-self: start;
-}
-.pz-preview-hero {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: 6px;
-}
-.pz-big-avatar {
-  box-shadow: 0 0 0 4px var(--surface), 0 0 0 6px var(--accent);
-}
-.pz-preview-name {
-  font-size: 20px;
-  font-weight: 700;
-  max-width: 100%;
-  overflow-wrap: anywhere;
-}
 .pz-mock {
   display: grid;
   gap: 4px;
@@ -359,8 +336,8 @@ a.user-chip:hover,
   justify-content: space-between;
   gap: 8px;
   background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: 12px;
+  border: var(--border-w) solid var(--border);
+  border-radius: var(--radius-sm);
   padding: 6px 8px 6px 6px;
 }
 .pz-mock-brand {
@@ -374,13 +351,6 @@ a.user-chip:hover,
   min-height: 36px;
   font-size: 13px;
   max-width: 150px;
-}
-.pz-mock-greeting {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 10px 12px;
-  font-weight: 700;
 }
 .save-bar {
   display: flex;
@@ -420,21 +390,13 @@ a.user-chip:hover,
   box-shadow: 0 0 0 3px var(--surface), 0 0 0 5px color-mix(in srgb, var(--accent) 60%, transparent);
 }
 .hero {
-  background: linear-gradient(150deg, var(--accent-soft), var(--surface) 70%);
+  background: var(--hero-art), var(--surface);
 }
 
 @media (min-width: 760px) {
   .theme-grid {
     grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
     gap: 12px;
-  }
-  .pz-profile {
-    grid-template-columns: minmax(0, 1fr) 300px;
-    align-items: start;
-  }
-  .pz-preview {
-    position: sticky;
-    top: 84px;
   }
 }
 

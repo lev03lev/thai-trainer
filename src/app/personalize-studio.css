@@ -1,0 +1,376 @@
+/* ================= סטודיו ההתאמה האישית ================= */
+
+/* ---------- מעבר בין ערכות: מעגל שמתפשט מנקודת הלחיצה ---------- */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+::view-transition-new(root) {
+  animation: theme-reveal 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+@keyframes theme-reveal {
+  from {
+    clip-path: circle(0 at var(--vt-x, 50%) var(--vt-y, 0));
+  }
+  to {
+    clip-path: circle(150vmax at var(--vt-x, 50%) var(--vt-y, 0));
+  }
+}
+
+/* ---------- פריסה: כרטיס חי + הגדרות ---------- */
+.pz-head {
+  margin-bottom: 16px;
+}
+.pz-layout {
+  display: grid;
+  gap: 16px;
+}
+.pz-stage {
+  display: grid;
+  gap: 12px;
+  align-self: start;
+}
+.pz-controls {
+  min-width: 0;
+}
+
+.pz-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 6px;
+  padding: 18px 16px 16px;
+  border-radius: var(--radius);
+  border: var(--border-w) solid var(--border);
+  background: var(--hero-art), var(--surface);
+  color: var(--text);
+  font-family: var(--font-body);
+  box-shadow: var(--shadow);
+  transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+/* תבנית הרקע של הערכה גם בתוך הכרטיס (נראית גם בתצוגה מקדימה בריחוף) */
+.pz-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--bg-art);
+  opacity: 0.9;
+}
+.pz-hero-top {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.pz-hero-avatar {
+  margin: 6px 0 2px;
+  animation: avatar-pop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes avatar-pop {
+  from {
+    transform: scale(0.82) rotate(-6deg);
+    opacity: 0.4;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+.pz-big-avatar {
+  box-shadow:
+    0 0 0 5px var(--surface),
+    0 0 0 8px var(--accent),
+    0 12px 30px color-mix(in srgb, var(--accent) 30%, transparent);
+}
+.pz-hero-name {
+  font-family: var(--font-heading);
+  font-size: 24px;
+  font-weight: 700;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+.pz-hero-sub {
+  color: var(--muted);
+  font-size: 14px;
+}
+.pz-hero-ui {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 8px;
+}
+.pz-fake-btn {
+  display: inline-flex;
+  align-items: center;
+  min-height: 36px;
+  padding: 6px 14px;
+  border-radius: var(--radius-sm);
+  background: var(--btn-bg);
+  box-shadow: var(--btn-shadow);
+  color: var(--accent-ink);
+  font-weight: 700;
+  font-size: 14px;
+}
+.pz-hero-bar {
+  width: 70%;
+  margin-top: 6px;
+}
+
+/* ---------- צ'יפים ומונים ---------- */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.chip {
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  background: var(--surface-2);
+  border: var(--border-w) solid transparent;
+  border-radius: 999px;
+  padding: 7px 14px;
+  min-height: 40px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.chip:hover {
+  border-color: var(--border);
+}
+.chip[aria-selected="true"] {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+}
+.count {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+  background: var(--surface);
+  border-radius: 999px;
+  padding: 0 7px;
+  min-width: 22px;
+  text-align: center;
+}
+.segmented.big {
+  width: 100%;
+  max-width: 420px;
+}
+.segmented.big button {
+  flex: 1;
+  min-height: 44px;
+  font-size: 16px;
+}
+
+/* ---------- עורך האווטר ---------- */
+.builder {
+  display: grid;
+  gap: 12px;
+}
+.builder-tabs {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+  scrollbar-width: thin;
+}
+.builder-tabs button {
+  flex: none;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted);
+  background: var(--surface-2);
+  border: var(--border-w) solid transparent;
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  min-height: 44px;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  cursor: pointer;
+}
+.builder-tabs button[aria-selected="true"] {
+  color: var(--text);
+  background: var(--accent-soft);
+  border-color: var(--accent);
+}
+.tab-icon {
+  font-size: 20px;
+  line-height: 1;
+}
+.builder-panel {
+  display: grid;
+  gap: 14px;
+  animation: panel-in 0.25s ease;
+}
+@keyframes panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.part-set {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+.part-set legend {
+  font-weight: 700;
+  margin-bottom: 8px;
+  padding: 0;
+}
+.shape-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
+  gap: 8px;
+  max-height: 290px;
+  overflow-y: auto;
+  padding: 4px;
+  margin: -4px;
+}
+.shape-opt {
+  position: relative;
+  aspect-ratio: 1;
+  padding: 0;
+  border: calc(var(--border-w) + 1px) solid transparent;
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  cursor: pointer;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.12s ease, border-color 0.12s ease;
+}
+.shape-opt:hover {
+  transform: translateY(-2px);
+  border-color: var(--border);
+}
+.shape-opt[aria-checked="true"] {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+.thumb {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: hidden;
+}
+.thumb img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  transition: transform 0.2s ease;
+}
+/* הגדלה של האזור שמשנים */
+.zoom-eyes img {
+  transform: scale(2) translateY(6%);
+}
+.zoom-mouth img {
+  transform: scale(2) translateY(-8%);
+}
+.zoom-top img {
+  transform: scale(1.35) translateY(12%);
+}
+.zoom-body img {
+  transform: scale(1.6) translateY(-22%);
+}
+.none-mark {
+  font-size: 26px;
+  color: var(--muted);
+}
+.swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.swatch {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 3px solid var(--surface);
+  box-shadow: 0 0 0 1px var(--border);
+  cursor: pointer;
+  padding: 0;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+.swatch.wide {
+  width: 52px;
+  border-radius: 14px;
+}
+.swatch:hover {
+  transform: scale(1.1);
+}
+.swatch[aria-checked="true"] {
+  box-shadow:
+    0 0 0 2px var(--surface),
+    0 0 0 5px var(--accent);
+  transform: scale(1.08);
+}
+.builder-actions {
+  padding-top: 10px;
+  border-top: var(--border-w) solid var(--border);
+}
+
+/* כפתור כבוי (ביטול פעולה, שמירה) */
+.btn:disabled {
+  box-shadow: none;
+}
+
+@media (min-width: 900px) {
+  .pz-layout {
+    grid-template-columns: 300px minmax(0, 1fr);
+    align-items: start;
+  }
+  .pz-stage {
+    position: sticky;
+    top: 76px;
+  }
+}
+
+@media (max-width: 899px) {
+  .pz-hero {
+    padding: 14px 12px;
+  }
+  .pz-hero-avatar .avatar {
+    width: 104px !important;
+    height: 104px !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-new(root) {
+    animation: none;
+  }
+  .pz-hero-avatar,
+  .builder-panel {
+    animation: none;
+  }
+  .shape-opt,
+  .swatch,
+  .thumb img {
+    transition: none;
+  }
+  .shape-opt:hover,
+  .swatch:hover,
+  .swatch[aria-checked="true"] {
+    transform: none;
+  }
+}

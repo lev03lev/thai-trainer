@@ -31,7 +31,7 @@ export function UserChip() {
       aria-current={active ? "page" : undefined}
       aria-label={p.displayName ? `הפרופיל של ${p.displayName} — התאמה אישית` : "התאמה אישית: שם, אווטר וערכת עיצוב"}
     >
-      <Avatar id={p.avatarId} name={p.displayName} size={32} />
+      <Avatar id={p.avatarId} custom={p.avatarCustom} name={p.displayName} size={32} />
       <span className="user-chip-name">{name}</span>
     </Link>
   );

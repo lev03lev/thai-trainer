@@ -16,9 +16,9 @@ test("פרופיל: שם ואווטר עם תצוגה מקדימה, שמירה �
   const name = page.locator("#display-name");
   await name.fill("נוגה");
   // התצוגה המקדימה מתעדכנת עוד לפני השמירה
-  await expect(page.locator(".pz-preview-name")).toHaveText("נוגה");
-  await expect(page.getByText("תצוגה מקדימה — עוד לא נשמר")).toBeVisible();
-  await page.getByRole("tab", { name: "מהמטבח" }).click();
+  await expect(page.locator(".pz-hero-name")).toHaveText("נוגה");
+  await expect(page.getByText("שינויים שעוד לא נשמרו")).toBeVisible();
+  await page.getByRole("tab", { name: /מהמטבח/ }).click();
   await page.getByRole("radio", { name: "צ'ילי" }).click();
   await expect(page.getByRole("radio", { name: "צ'ילי" })).toHaveAttribute("aria-checked", "true");
   await page.getByRole("button", { name: "שמירת הפרופיל" }).click();
@@ -33,6 +33,39 @@ test("פרופיל: שם ואווטר עם תצוגה מקדימה, שמירה �
   await page.goto("/");
   await expect(page.getByRole("heading", { level: 1 })).toContainText("שלום, נוגה!");
   expect(errors).toEqual([]);
+});
+
+test("עורך אווטר: עיצוב, תצוגה חיה, שמירה ושרידות", async ({ page }) => {
+  const errors = watchErrors(page);
+  await page.goto("/personalize");
+  await page.getByRole("tab", { name: /עיצוב אישי/ }).click();
+  const hero = page.locator(".pz-hero img");
+  await expect(hero).toBeVisible();
+  const before = await hero.getAttribute("src");
+  await page.getByRole("tab", { name: /שיער/ }).click();
+  await page.getByRole("radio", { name: "תסרוקת / כיסוי ראש 3", exact: true }).click();
+  await expect.poll(() => hero.getAttribute("src")).not.toBe(before);
+  await page.getByRole("tab", { name: /משקפיים/ }).click();
+  await page.getByRole("radio", { name: "משקפיים ואביזרים 2", exact: true }).click();
+  await expect(page.getByRole("radio", { name: "צבע המסגרת 1", exact: true })).toBeVisible();
+  const designed = await hero.getAttribute("src");
+  await page.getByRole("button", { name: "שמירת הפרופיל" }).click();
+  await page.reload();
+  const chipImg = page.locator("header .user-chip img");
+  await expect(chipImg).toHaveAttribute("alt", "אווטר בעיצוב אישי");
+  expect(await chipImg.getAttribute("src")).toBe(designed);
+  // נפתח שוב בעורך, עם אותו עיצוב
+  await expect(page.getByRole("tab", { name: /עיצוב אישי/ })).toHaveAttribute("aria-selected", "true");
+  expect(errors).toEqual([]);
+});
+
+test("ריחוף על ערכה מציג אותה בכרטיס בלבד, לחיצה מחליפה את כל המערכת", async ({ page }) => {
+  await page.goto("/personalize");
+  await page.getByRole("radio", { name: /גלקסיה/ }).hover();
+  await expect(page.locator(".pz-hero")).toHaveAttribute("data-theme", "galaxy");
+  await expect(page.locator("html")).not.toHaveAttribute("data-theme", "galaxy");
+  await page.getByRole("radio", { name: /גלקסיה/ }).click();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "galaxy");
 });
 
 test("ביטול שינויים מחזיר לפרופיל השמור", async ({ page }) => {

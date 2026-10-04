@@ -26,6 +26,20 @@ export function applyTheme(choice: ThemeChoice) {
 }
 
 /**
+ * החלפה עם מעבר: מעגל שמתפשט מנקודת הלחיצה (View Transitions API).
+ * דפדפן בלי תמיכה, או משתמש שביקש פחות תנועה — מקבלים החלפה מיידית.
+ */
+export function applyThemeAnimated(choice: ThemeChoice, origin?: { x: number; y: number }) {
+  const doc = document as Document & { startViewTransition?: (cb: () => void) => unknown };
+  const reduce = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+  if (!doc.startViewTransition || reduce) return applyTheme(choice);
+  const root = document.documentElement;
+  root.style.setProperty("--vt-x", `${origin?.x ?? window.innerWidth / 2}px`);
+  root.style.setProperty("--vt-y", `${origin?.y ?? 0}px`);
+  doc.startViewTransition(() => applyTheme(choice));
+}
+
+/**
  * סקריפט קטן שרץ ב-<head> לפני הציור הראשון: מחיל את הערכה השמורה,
  * כדי שלא יהיה הבהוב של העיצוב הרגיל לפני שהאפליקציה נטענת.
  */

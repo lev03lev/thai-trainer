@@ -38,7 +38,7 @@ export default function Home() {
     <div className="stack">
       <section className="card hero">
         <div className="greet" style={{ flex: 1 }}>
-          {(prefs.avatarId || prefs.displayName) && <Avatar id={prefs.avatarId} name={prefs.displayName} size={64} />}
+          {(prefs.avatarId || prefs.displayName) && <Avatar id={prefs.avatarId} custom={prefs.avatarCustom} name={prefs.displayName} size={64} />}
           <div>
             <h1>{prefs.displayName ? `שלום, ${prefs.displayName}!` : "שלום!"} מתכוננת למבחן התפריט?</h1>
           <p className="muted">

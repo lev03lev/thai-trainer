@@ -4,14 +4,15 @@
 // useSyncExternalStore + שכבת אחסון שאפשר להחליף.
 
 import { useSyncExternalStore } from "react";
-import { AVATAR_BY_ID } from "@/avatars/avatars";
-import { applyTheme } from "@/themes/apply";
+import { isKnownAvatar } from "@/avatars/avatars";
+import type { AvatarConfig } from "@/avatars/catalog";
+import { applyTheme, applyThemeAnimated } from "@/themes/apply";
 import type { ThemeChoice } from "@/themes/themes";
-import { cleanName, defaultPreferences, sanitizePreferences, type UserPreferences } from "./model";
+import { cleanName, defaultPreferences, looseConfig, normalizeAvatar, sanitizePreferences, type UserPreferences } from "./model";
 import { localStorageRepository, type PreferencesRepository } from "./repository";
 
 const repo: PreferencesRepository = localStorageRepository;
-const known = (id: string) => AVATAR_BY_ID.has(id);
+const known = isKnownAvatar;
 const SERVER = defaultPreferences();
 
 let state: UserPreferences | null = null;
@@ -19,10 +20,10 @@ const listeners = new Set<() => void>();
 
 function init() {
   if (state) return;
-  state = sanitizePreferences(repo.load(), known);
+  state = normalizeAvatar(sanitizePreferences(repo.load(), known));
   // נרשם פעם אחת לכל חיי הדף
   repo.subscribe?.((raw) => {
-    state = sanitizePreferences(raw, known);
+    state = normalizeAvatar(sanitizePreferences(raw, known));
     applyTheme(state.theme);
     emit();
   });
@@ -47,20 +48,24 @@ export function getPreferences(): UserPreferences {
   return state!;
 }
 
-/** החלפת ערכה: מיידית בדף ונשמרת */
-export function setTheme(theme: ThemeChoice) {
+/** החלפת ערכה: מיידית בדף (עם מעבר עדין מנקודת הלחיצה) ונשמרת */
+export function setTheme(theme: ThemeChoice, origin?: { x: number; y: number }) {
   init();
-  applyTheme(theme);
+  applyThemeAnimated(theme, origin);
   commit({ ...state!, theme });
 }
 
-export function saveProfile(profile: { displayName: string; avatarId: string | null }) {
+export function saveProfile(profile: { displayName: string; avatarId: string | null; avatarCustom?: AvatarConfig | null }) {
   init();
-  commit({
-    ...state!,
-    displayName: cleanName(profile.displayName),
-    avatarId: profile.avatarId && known(profile.avatarId) ? profile.avatarId : null,
-  });
+  commit(
+    normalizeAvatar({
+      ...state!,
+      displayName: cleanName(profile.displayName),
+      avatarId: profile.avatarId && known(profile.avatarId) ? profile.avatarId : null,
+      // ההגדרה המעוצבת נשמרת גם כשבוחרים אווטר אחר — כדי שלא תאבד
+      avatarCustom: profile.avatarCustom === undefined ? state!.avatarCustom : looseConfig(profile.avatarCustom),
+    }),
+  );
 }
 
 export function resetPreferences() {
