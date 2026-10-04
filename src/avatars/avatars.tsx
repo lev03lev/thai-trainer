@@ -3,6 +3,7 @@
 // להוספת אווטר: מוסיפים רשומה ל-FACES או ל-FOODS.
 
 import type { ReactNode } from "react";
+import { CUSTOM_AVATAR_ID, GALLERY_IDS } from "./catalog";
 
 export interface AvatarDef {
   id: string;
@@ -11,10 +12,6 @@ export interface AvatarDef {
   art: ReactNode;
 }
 
-export const AVATAR_CATEGORIES = [
-  { id: "faces", label: "דמויות" },
-  { id: "food", label: "מהמטבח" },
-] as const;
 
 // ---------- דמויות ----------
 type Eyes = "dot" | "oval" | "happy" | "wink";
@@ -407,3 +404,6 @@ const FOODS: AvatarDef[] = [
 
 export const AVATARS: AvatarDef[] = [...FACES, ...FOODS];
 export const AVATAR_BY_ID = new Map(AVATARS.map((a) => [a.id, a]));
+
+/** מזהה תקין: איור שלנו, אווטר מהגלריה, או אווטר מעוצב אישית */
+export const isKnownAvatar = (id: string) => AVATAR_BY_ID.has(id) || GALLERY_IDS.has(id) || id === CUSTOM_AVATAR_ID;

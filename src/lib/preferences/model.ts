@@ -2,6 +2,7 @@
 // גם בעתיד כ-user settings בשרת (אותו JSON, אותו sanitize).
 
 import { isThemeChoice, type ThemeChoice } from "@/themes/themes";
+import { CONFIG_KEYS, CUSTOM_AVATAR_ID, type AvatarConfig } from "@/avatars/catalog";
 
 export interface UserPreferences {
   v: 1;
@@ -9,6 +10,8 @@ export interface UserPreferences {
   displayName: string;
   /** מזהה מתוך בנק האווטרים; null = עדיין לא נבחר (מוצגת האות הראשונה של השם) */
   avatarId: string | null;
+  /** הגדרת האווטר המעוצב אישית (רלוונטי כש-avatarId === "custom") */
+  avatarCustom: AvatarConfig | null;
   updatedAt: number;
 }
 
@@ -19,8 +22,25 @@ export const defaultPreferences = (): UserPreferences => ({
   theme: "system",
   displayName: "",
   avatarId: null,
+  avatarCustom: null,
   updatedAt: 0,
 });
+
+/**
+ * בדיקה בסיסית של מבנה האווטר המעוצב (מחרוזות קצרות בשדות הידועים).
+ * הבדיקה המלאה מול רשימות האפשרויות נעשית בזמן הציור (dicebear.sanitizeConfig).
+ */
+export function looseConfig(input: unknown): AvatarConfig | null {
+  if (!input || typeof input !== "object") return null;
+  const raw = input as Record<string, unknown>;
+  const out = {} as AvatarConfig;
+  for (const k of CONFIG_KEYS) {
+    const v = raw[k];
+    if (typeof v !== "string" || v.length > 40 || !/^[A-Za-z0-9-]+$/.test(v)) return null;
+    out[k] = v;
+  }
+  return out;
+}
 
 /** ניקוי שם תצוגה: רווחים כפולים, תווי בקרה ואורך */
 export function cleanName(name: string): string {
@@ -44,8 +64,14 @@ export function sanitizePreferences(input: unknown, knownAvatar: (id: string) =>
     theme: isThemeChoice(p.theme) ? p.theme : d.theme,
     displayName: typeof p.displayName === "string" ? cleanName(p.displayName) : d.displayName,
     avatarId: typeof p.avatarId === "string" && knownAvatar(p.avatarId) ? p.avatarId : null,
+    avatarCustom: looseConfig(p.avatarCustom),
     updatedAt: typeof p.updatedAt === "number" && Number.isFinite(p.updatedAt) ? p.updatedAt : 0,
   };
+}
+
+/** אווטר מעוצב בלי הגדרה תקינה → בלי אווטר */
+export function normalizeAvatar(p: UserPreferences): UserPreferences {
+  return p.avatarId === CUSTOM_AVATAR_ID && !p.avatarCustom ? { ...p, avatarId: null } : p;
 }
 
 /** האות שמוצגת כשאין אווטר */

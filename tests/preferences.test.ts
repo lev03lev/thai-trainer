@@ -32,7 +32,7 @@ describe("העדפות משתמש", () => {
   });
 
   it("בנק אווטרים: מגוון, מזהים ייחודיים ושמות בעברית", () => {
-    expect(AVATARS.length).toBeGreaterThanOrEqual(30);
+    expect(AVATARS.length).toBeGreaterThanOrEqual(30); // איורי ה-SVG שלנו; הגלריה המלאה נבדקת ב-avatars.test.ts
     expect(new Set(AVATARS.map((a) => a.id)).size).toBe(AVATARS.length);
     for (const a of AVATARS) {
       expect(a.label).toMatch(/[א-ת]/);

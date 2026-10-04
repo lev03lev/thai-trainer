@@ -41,7 +41,9 @@ const PAIRS: [keyof ThemeTokens, keyof ThemeTokens, number][] = [
 describe("ערכות עיצוב", () => {
   it("לכל ערכה מזהה ייחודי, שם ותיאור", () => {
     expect(new Set(THEMES.map((t) => t.id)).size).toBe(THEMES.length);
-    expect(THEMES.length).toBeGreaterThanOrEqual(8);
+    expect(THEMES.length).toBeGreaterThanOrEqual(18);
+    expect(THEMES.filter((t) => t.scheme === "light").length).toBeGreaterThanOrEqual(8);
+    expect(THEMES.filter((t) => t.scheme === "dark").length).toBeGreaterThanOrEqual(8);
     for (const t of THEMES) {
       expect(t.name.length).toBeGreaterThan(1);
       expect(t.description.length).toBeGreaterThan(5);
@@ -55,6 +57,11 @@ describe("ערכות עיצוב", () => {
       for (const [fg, bg, min] of PAIRS) {
         const c = contrast(t.tokens[fg], t.tokens[bg]);
         if (c < min) fails.push(`${fg} על ${bg}: ${c.toFixed(2)} (נדרש ${min})`);
+      }
+      // כפתור בגרדיאנט: הטקסט צריך להיות קריא בשני הקצוות
+      for (const end of t.style?.btnEnds ?? []) {
+        const c = contrast(t.tokens.accentInk, end);
+        if (c < 4.5) fails.push(`טקסט כפתור על ${end}: ${c.toFixed(2)} (נדרש 4.5)`);
       }
       expect(fails).toEqual([]);
     });
